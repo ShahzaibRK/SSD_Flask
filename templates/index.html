@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+{% block content %}
+<h2>People</h2>
+
+<div class="card p-3 mb-4">
+  <h5>Add Person</h5>
+  <form method="POST">
+    {{ form.hidden_tag() }}
+    <div class="mb-3">
+      {{ form.fname.label(class="form-label") }}
+      {{ form.fname(class="form-control") }}
+      {% for err in form.fname.errors %}<div class="text-danger small">{{ err }}</div>{% endfor %}
+    </div>
+    <div class="mb-3">
+      {{ form.lname.label(class="form-label") }}
+      {{ form.lname(class="form-control") }}
+      {% for err in form.lname.errors %}<div class="text-danger small">{{ err }}</div>{% endfor %}
+    </div>
+    <div class="mb-3">
+      {{ form.email.label(class="form-label") }}
+      {{ form.email(class="form-control") }}
+      {% for err in form.email.errors %}<div class="text-danger small">{{ err }}</div>{% endfor %}
+    </div>
+    <button type="submit" class="btn btn-primary">{{ form.submit.label.text }}</button>
+  </form>
+</div>
+
+<table class="table table-bordered">
+  <thead><tr><th>#</th><th>First</th><th>Last</th><th>Email</th><th>Actions</th></tr></thead>
+  <tbody>
+    {% for p in allpeople %}
+    <tr>
+      <td>{{ p.sno }}</td>
+      <td>{{ p.fname }}</td>
+      <td>{{ p.lname }}</td>
+      <td>{{ p.email }}</td>
+      <td>
+        <a href="{{ url_for('update', sno=p.sno) }}" class="btn btn-sm btn-success">Update</a>
+        <form method="POST" action="{{ url_for('delete', sno=p.sno) }}" style="display:inline;">
+          {{ csrf_token() }}
+          <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
